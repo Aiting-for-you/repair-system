@@ -52,6 +52,13 @@ class QuotationItem(db.Model):
 
 with app.app_context():
     db.create_all()
+    # 检查每个学校是否有"其他"项目，没有则添加
+    schools = School.query.all()
+    for school in schools:
+        exists = RepairItem.query.filter_by(school_id=school.id, name='其他').first()
+        if not exists:
+            db.session.add(RepairItem(name='其他', price=0.0, unit='项', school_id=school.id))
+    db.session.commit()
 
 # --- 内存数据存储 (后续可以替换为数据库) ---
 schools = [
@@ -275,7 +282,25 @@ def submit_quotation():
 
 @app.route('/api/quotations', methods=['GET'])
 def get_quotations():
-    quotations = Quotation.query.order_by(Quotation.id.desc()).all()
+    school_id = request.args.get('school_id', type=int)
+    start = request.args.get('start')
+    end = request.args.get('end')
+    query = Quotation.query
+    if school_id:
+        query = query.filter(Quotation.school_id == school_id)
+    if start:
+        try:
+            start_dt = datetime.datetime.fromisoformat(start)
+            query = query.filter(Quotation.created_at >= start_dt.isoformat())
+        except Exception:
+            pass
+    if end:
+        try:
+            end_dt = datetime.datetime.fromisoformat(end)
+            query = query.filter(Quotation.created_at <= end_dt.isoformat())
+        except Exception:
+            pass
+    quotations = query.order_by(Quotation.id.desc()).all()
     result = []
     for q in quotations:
         result.append({
@@ -486,6 +511,18 @@ def import_school_repair_items():
             db.session.add(RepairItem(name=item['name'], price=item['price'], unit='项', school_id=s.id))
     db.session.commit()
     return jsonify({'message': '导入完成'})
+
+@app.route('/api/quotations/<int:quotation_id>', methods=['DELETE'])
+def delete_quotation(quotation_id):
+    quotation = Quotation.query.get(quotation_id)
+    if not quotation:
+        return jsonify({'error': '未找到计价单'}), 404
+    # 先删除明细
+    for item in quotation.items:
+        db.session.delete(item)
+    db.session.delete(quotation)
+    db.session.commit()
+    return jsonify({'message': '计价单已删除'})
 
 if __name__ == '__main__':
     # 确保 uploads 文件夹存在

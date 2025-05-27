@@ -69,22 +69,34 @@
                     <input type="date" id="export-end">
                     <button id="export-batch-excel-btn" class="button">批量导出Excel</button>
                 </div>
-                <table class="admin-table" id="quotations-table">
-                    <thead>
-                        <tr>
-                            <th>计价单ID</th>
-                            <th>单号</th>
-                            <th>学校</th>
-                            <!-- <th>客户</th> -->
-                            <th>总金额</th>
-                            <th>创建日期</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- 数据将通过JS加载 -->
-                    </tbody>
-                </table>
+                <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px; margin-top: 10px;">
+                    <div style="margin-bottom: 10px;">
+                        <label for="filter-school">学校:</label>
+                        <select id="filter-school">
+                            <option value="">全部</option>
+                        </select>
+                        <label for="filter-start">查询起始日期:</label>
+                        <input type="date" id="filter-start">
+                        <label for="filter-end">结束日期:</label>
+                        <input type="date" id="filter-end">
+                        <button id="filter-quotation-btn" class="button">查询</button>
+                    </div>
+                    <table class="admin-table" id="quotations-table">
+                        <thead>
+                            <tr>
+                                <th>计价单ID</th>
+                                <th>单号</th>
+                                <th>学校</th>
+                                <th>总金额</th>
+                                <th>创建日期</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 数据将通过JS加载 -->
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
         </main>

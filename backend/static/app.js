@@ -18,6 +18,43 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentRepairItems = []; // 当前学校的维修项目
     let selectedQuotationItems = []; // 当前计价单中的项目
 
+    // 监听学校选择变化
+    schoolSelect.addEventListener('change', function() {
+        currentSchoolId = this.value ? parseInt(this.value) : null;
+        fetchRepairItems(currentSchoolId);
+    });
+
+    // 页面加载时自动获取学校列表
+    fetchSchools();
+
+    const repairPriceInput = document.createElement('input');
+    repairPriceInput.type = 'number';
+    repairPriceInput.id = 'repair-price';
+    repairPriceInput.placeholder = '请输入价格';
+    repairPriceInput.style.display = 'none';
+    repairPriceInput.step = '0.01';
+    
+    // 确保父节点和参考节点存在
+    if(repairItemSelect && repairItemSelect.parentNode && repairQuantityInput) {
+        try {
+            repairItemSelect.parentNode.insertBefore(repairPriceInput, repairQuantityInput);
+        } catch (e) {
+            // 如果insertBefore失败，改用appendChild
+            repairItemSelect.parentNode.appendChild(repairPriceInput);
+        }
+    }
+
+    // 监听维修项目选择，若为"其他"则显示价格输入框
+    repairItemSelect.addEventListener('change', function() {
+        const selectedOption = repairItemSelect.options[repairItemSelect.selectedIndex];
+        if (selectedOption && selectedOption.textContent.startsWith('其他')) {
+            repairPriceInput.style.display = '';
+        } else {
+            repairPriceInput.style.display = 'none';
+            repairPriceInput.value = '';
+        }
+    });
+
     /**
      * 获取学校列表并填充选择框
      */
@@ -26,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`${API_BASE_URL}/schools`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const schools = await response.json();
+            schoolSelect.innerHTML = ''; // 清空下拉框
             schools.forEach(school => {
                 const option = document.createElement('option');
                 option.value = school.id;
@@ -121,22 +159,29 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {number} itemId 项目ID
      * @param {number} quantity 数量
      */
-    function handleAddToCart(itemId, quantity) { // quantity 现在是必须的
+    function handleAddToCart(itemId, quantity) {
         if (!itemId || quantity <= 0) {
             alert("请选择有效的维修项目和数量！");
             return;
         }
-
         const selectedOption = repairItemSelect.options[repairItemSelect.selectedIndex];
         if (!selectedOption || !selectedOption.value) {
             alert("请选择一个维修项目！");
             return;
         }
-
+        let price = parseFloat(selectedOption.dataset.price);
+        if (selectedOption.textContent.startsWith('其他')) {
+            price = parseFloat(repairPriceInput.value);
+            if (isNaN(price) || price <= 0) {
+                alert('请输入有效的价格！');
+                repairPriceInput.focus();
+                return;
+            }
+        }
         const itemToAdd = {
             id: parseInt(selectedOption.value),
             name: selectedOption.dataset.name,
-            price: parseFloat(selectedOption.dataset.price),
+            price: price,
             unit: selectedOption.dataset.unit
         };
 
@@ -277,11 +322,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const result = await response.json();
             alert(`计价单 ${result.quotation_number} 提交成功！`);
-
-            // 自动下载图片和Excel
-            window.open(`${API_BASE_URL}/quotations/${result.id}/image`, '_blank');
-            window.open(`${API_BASE_URL}/quotations/${result.id}/excel`, '_blank');
-
             // 重置表单
             selectedQuotationItems = [];
             renderSelectedItems();
@@ -318,21 +358,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // 新增：添加到计价单按钮的事件监听
     addItemToCartBtn.addEventListener('click', () => {
         const selectedItemId = parseInt(repairItemSelect.value);
-        const quantity = parseInt(repairQuantityInput.value);
-
-        if (!selectedItemId) {
-            alert('请选择一个维修项目！');
-            repairItemSelect.focus();
-            return;
-        }
-        if (isNaN(quantity) || quantity <= 0) {
-            alert('请输入有效的维修数量！');
-            repairQuantityInput.focus();
-            return;
-        }
+        const quantity = parseInt(repairQuantityInput.value) || 1;
         handleAddToCart(selectedItemId, quantity);
     });
 
+    // 初始化页面
+    fetchSchools();
     selectedItemsList.addEventListener('click', (event) => {
         if (event.target.classList.contains('remove-item-btn')) {
             const itemId = parseInt(event.target.dataset.itemId);

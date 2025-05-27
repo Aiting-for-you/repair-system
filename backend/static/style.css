@@ -574,3 +574,304 @@ footer a:hover {
          width: auto;
     }
 }
+}
+
+/* 移动端响应式样式 */
+@media (max-width: 768px) {
+    #school-select, #repair-item-select {
+        width: 100%;
+        min-width: auto;
+        font-size: 16px;
+        padding: 10px;
+    }
+    
+    .school-selector-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .school-selector-container label {
+        margin-bottom: 8px;
+    }
+}
+
+.item-card .quantity-controls {
+    flex-direction: column;
+}
+
+.item-card .quantity-controls input[type="number"] {
+    margin: 5px 0;
+}
+
+.add-to-cart-btn {
+    width: 100%;
+}
+
+.selected-item {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.selected-item .item-actions {
+    margin-top: 5px;
+    width: 100%;
+    text-align: right;
+}
+
+.remove-item-btn {
+    width: auto; /* 恢复按钮的自动宽度 */
+}
+}
+
+.selected-item .item-subtotal {
+    font-weight: bold;
+    min-width: 60px;
+    text-align: right;
+}
+
+.selected-item .remove-item-btn {
+    background-color: #d9534f; /* 红色按钮 */
+    color: white;
+    margin-left: 10px;
+    padding: 5px 8px;
+}
+
+.selected-item .remove-item-btn:hover {
+    background-color: #c9302c;
+}
+
+.quotation-summary {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px solid #4CAF50;
+}
+
+.quotation-summary p {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: right;
+    margin-bottom: 15px;
+}
+
+.quotation-summary #total-price {
+    color: #e67e22;
+}
+
+.customer-info {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.customer-info label {
+    margin-right: 10px;
+}
+
+.customer-info input[type="text"] {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.primary-button {
+    background-color: #4CAF50;
+    color: white;
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1em;
+}
+
+.primary-button:hover {
+    background-color: #45a049;
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    font-size: 0.9em;
+    color: #777;
+}
+
+footer a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* 后台管理页面特定样式 */
+.admin-container {
+    width: 95%;
+    max-width: 1400px;
+}
+
+.admin-main {
+    display: block; /* 后台通常是单栏布局 */
+}
+
+.admin-section {
+    margin-bottom: 30px;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.admin-table th, .admin-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.admin-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.admin-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.admin-table .actions a, .admin-table .actions button {
+    margin-right: 5px;
+    padding: 5px 8px;
+    font-size: 0.85em;
+}
+
+.edit-btn {
+    background-color: #f0ad4e; /* 黄色 */
+    color: white;
+}
+.edit-btn:hover {
+    background-color: #ec971f;
+}
+
+.delete-btn {
+    background-color: #d9534f; /* 红色 */
+    color: white;
+}
+.delete-btn:hover {
+    background-color: #c9302c;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select {
+    width: calc(100% - 22px); /* 减去padding和border */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-group select {
+     width: 100%;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* 10% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    main {
+        grid-template-columns: 1fr; /* 单栏布局 */
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .school-selector-container {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    #school-select {
+        width: 100%;
+    }
+
+    #items-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    .item-card {
+        padding: 10px;
+    }
+
+    .button, button {
+        width: 100%;
+        margin-top: 5px;
+    }
+    .item-card .quantity-controls button{
+        width: 30px; /* 恢复按钮原本大小*/
+    }
+    .selected-item .remove-item-btn{
+         width: auto;
+    }
+}
+}

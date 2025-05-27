@@ -263,6 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="actions">
                     <a href="${API_BASE_URL}/quotations/${q.id}/image" target="_blank" class="button">查看图片</a>
                     <a href="${API_BASE_URL}/quotations/${q.id}/excel" target="_blank" class="button">导出Excel</a>
+                    <button class="button delete-quotation-btn" data-id="${q.id}">删除</button>
                 </td>
             `;
         });
@@ -366,12 +367,49 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {}
     }
 
+    // --- 计价单条件查询 ---
+    async function initFilterSchoolSelect() {
+        const select = document.getElementById('filter-school');
+        select.innerHTML = '<option value="">全部</option>';
+        try {
+            const response = await fetch(`${API_BASE_URL}/schools`);
+            if (!response.ok) return;
+            const schools = await response.json();
+            schools.forEach(school => {
+                const option = document.createElement('option');
+                option.value = school.id;
+                option.textContent = school.name;
+                select.appendChild(option);
+            });
+        } catch (e) {}
+    }
+    document.getElementById('filter-quotation-btn').addEventListener('click', async () => {
+        const schoolId = document.getElementById('filter-school').value;
+        const start = document.getElementById('filter-start').value;
+        const end = document.getElementById('filter-end').value;
+        let url = `${API_BASE_URL}/quotations`;
+        const params = [];
+        if (schoolId) params.push(`school_id=${encodeURIComponent(schoolId)}`);
+        if (start) params.push(`start=${encodeURIComponent(start)}`);
+        if (end) params.push(`end=${encodeURIComponent(end)}`);
+        if (params.length > 0) url += '?' + params.join('&');
+        try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error('查询失败');
+            const data = await res.json();
+            renderQuotationsTable(data);
+        } catch (e) {
+            alert('查询失败');
+        }
+    });
+
     // --- 初始化加载 ---
     async function initializeAdminPage() {
         await fetchAllSchools(); // 先加载学校，因为项目表单需要学校列表
         await fetchAllRepairItems();
         await fetchAllQuotations();
         await initExportSchoolSelect(); // 初始化导出学校下拉
+        await initFilterSchoolSelect(); // 初始化查询条件学校下拉
     }
 
     // 学校管理：新增、编辑、删除
@@ -420,6 +458,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 await fetchAllSchools();
                 await initExportSchoolSelect();
             } catch (e) { alert('删除失败'); }
+        }
+    });
+
+    // 计价单删除事件监听
+    quotationsTableBody.addEventListener('click', async (event) => {
+        const target = event.target;
+        if (target.classList.contains('delete-quotation-btn')) {
+            const id = target.dataset.id;
+            if (!confirm('确定要删除该计价单吗？此操作不可恢复。')) return;
+            try {
+                const response = await fetch(`${API_BASE_URL}/quotations/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('删除失败');
+                alert('删除成功');
+                fetchAllQuotations();
+            } catch (e) {
+                alert('删除失败');
+            }
         }
     });
 
