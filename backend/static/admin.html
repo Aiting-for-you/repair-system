@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理 - 维修计价系统</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container admin-container">
+        <header>
+            <h1>后台管理系统</h1>
+            <a href="index.html" class="button">返回前台</a>
+        </header>
+
+        <main class="admin-main">
+            <!-- 维修项目管理 -->
+            <section class="admin-section" id="admin-items">
+                <h2>维修项目管理</h2>
+                <button id="add-item-btn" class="button primary-button">新增维修项目</button>
+                <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px; margin-top: 10px;">
+                    <table class="admin-table" id="repair-items-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>项目名称</th>
+                                <th>价格</th>
+                                <th>单位</th>
+                                <th>所属学校</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 数据将通过JS加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 学校信息管理 (简单展示，实际可扩展) -->
+            <section class="admin-section" id="admin-schools">
+                <h2>学校信息管理</h2>
+                <button id="add-school-btn" class="button primary-button">新增学校</button>
+                <table class="admin-table" id="schools-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>学校名称</th>
+                            <!-- <th>操作</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 数据将通过JS加载 -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 计价单管理 -->
+            <section class="admin-section" id="admin-quotations">
+                <h2>计价单管理</h2>
+                <div class="export-controls">
+                    <label for="export-school">学校:</label>
+                    <select id="export-school">
+                        <option value="">全部</option>
+                    </select>
+                    <label for="export-start">起始日期:</label>
+                    <input type="date" id="export-start">
+                    <label for="export-end">结束日期:</label>
+                    <input type="date" id="export-end">
+                    <button id="export-batch-excel-btn" class="button">批量导出Excel</button>
+                </div>
+                <table class="admin-table" id="quotations-table">
+                    <thead>
+                        <tr>
+                            <th>计价单ID</th>
+                            <th>单号</th>
+                            <th>学校</th>
+                            <!-- <th>客户</th> -->
+                            <th>总金额</th>
+                            <th>创建日期</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 数据将通过JS加载 -->
+                    </tbody>
+                </table>
+            </section>
+
+        </main>
+
+        <footer>
+            <p>&copy; 2025 维修计价系统 - 后台管理</p>
+        </footer>
+    </div>
+
+    <!-- 新增/编辑项目 Modal -->
+    <div id="item-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal-btn">&times;</span>
+            <h3 id="modal-title">新增维修项目</h3>
+            <form id="item-form">
+                <input type="hidden" id="edit-item-id">
+                <div class="form-group">
+                    <label for="item-name">项目名称:</label>
+                    <input type="text" id="item-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="item-price">价格:</label>
+                    <input type="number" id="item-price" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="item-unit">单位:</label>
+                    <input type="text" id="item-unit" required>
+                </div>
+                <div class="form-group">
+                    <label for="item-school">所属学校:</label>
+                    <select id="item-school" required>
+                        <!-- 学校选项将通过JS加载 -->
+                    </select>
+                </div>
+                <button type="submit" id="save-item-btn" class="button primary-button">保存</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>维修计价系统</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>维修计价系统</h1>
+            <div class="school-selector-container">
+                <label for="school-select">选择学校:</label>
+                <select id="school-select">
+                    <option value="">请选择学校</option>
+                </select>
+            </div>
+        </header>
+
+        <main>
+            <section id="repair-items-section">
+                <h2>维修项目选择</h2>
+                <div class="form-group">
+                    <label for="repair-item-select">选择维修项目:</label>
+                    <select id="repair-item-select" class="repair-item-dropdown">
+                        <option value="">请选择维修项目</option>
+                        <!-- 维修项目将通过JS动态加载 -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="repair-quantity">数量:</label>
+                    <input type="number" id="repair-quantity" value="1" min="1">
+                </div>
+                <button id="add-item-to-cart-btn" class="button">添加到计价单</button>
+            </section>
+
+            <section id="quotation-section">
+                <h2>计价单</h2>
+                <div id="selected-items-list">
+                    <p class="empty-cart-message">请从上方选择维修项目并添加到计价单</p>
+                    <!-- 已选项目将通过JS动态加载 -->
+                </div>
+                <div class="quotation-summary">
+                    <div class="customer-info">
+                        <label for="repair-person">维修人员:</label>
+                        <input type="text" id="repair-person" placeholder="请输入维修人员姓名">
+                    </div>
+                    <div class="customer-info">
+                        <label for="repair-location">维修地点:</label>
+                        <input type="text" id="repair-location" placeholder="请输入维修地点">
+                    </div>
+                    <div class="customer-info">
+                        <label for="repair-time">维修时间:</label>
+                        <input type="datetime-local" id="repair-time">
+                    </div>
+                    <p>总计金额: <span id="total-price">0.00</span> 元</p>
+                    <button id="submit-quotation-btn" class="button primary-button">提交计价单</button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 维修计价系统</p>
+            <!-- <p><a href="admin.html">后台管理</a></p> -->
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
