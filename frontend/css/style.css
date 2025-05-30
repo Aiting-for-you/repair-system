@@ -222,8 +222,13 @@ section h2 {
         margin-top: 10px;
     }
 
-    #school-select {
+    #school-select,
+    #repair-item-select { /* Targeting both select elements */
         width: 100%;
+        box-sizing: border-box; /* Ensures padding and border don't make it overflow */
+        font-size: 1em;         /* Readable font size on mobile */
+        padding: 10px;          /* Comfortable padding for touch */
+        margin-bottom: 10px;    /* Space below if elements stack */
     }
 
     main {
@@ -287,6 +292,15 @@ section h2 {
 }
 
 @media (max-width: 480px) {
+    #school-select,
+    #repair-item-select { /* Styles for very small screens */
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 1em; /* Adjusted from 0.95em to be consistent with 768px or slightly larger if preferred */
+        padding: 10px;      /* Consistent padding */
+        margin-bottom: 8px; /* Slightly reduced margin if needed */
+    }
+
     header h1 {
         font-size: 1.3em;
     }
@@ -474,15 +488,18 @@ footer a:hover {
 .form-group input[type="text"],
 .form-group input[type="number"],
 .form-group select {
-    width: calc(100% - 22px); /* 减去padding和border */
+    /* width: calc(100% - 22px); Removed as box-sizing: border-box handles this better */
+    width: 100%; /* Ensure full width */
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    box-sizing: border-box; /* Added for consistent width calculation */
 }
 
-.form-group select {
+/* The following rule is now redundant due to changes above and can be removed or commented out. */
+/* .form-group select {
      width: 100%;
-}
+} */
 
 .modal {
     display: none; /* Hidden by default */
